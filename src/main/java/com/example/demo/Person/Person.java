@@ -1,11 +1,25 @@
 package com.example.demo.Person;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.Period;
+
+@Entity
+@Table
 public class Person {
+    @Id
+    @SequenceGenerator(name = "person_sequence",
+            sequenceName = "person_sequence",
+            allocationSize = 1 )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                    generator = "person_sequence")
     private Long id;
     private String name;
+
+    @Transient
     private Integer age;
+    private LocalDate date_of_birth;
     private LocalDate contact_date;
     private Integer family_members;
     private String details;
@@ -14,7 +28,7 @@ public class Person {
 
     public Person(Long id,
                   String name,
-                  Integer age,
+                  LocalDate date_of_birth,
                   LocalDate contact_date,
                   Integer family_members,
                   String details,
@@ -22,7 +36,7 @@ public class Person {
                   String address) {
         this.id = id;
         this.name = name;
-        this.age = age;
+        this.date_of_birth = date_of_birth;
         this.contact_date = contact_date;
         this.family_members = family_members;
         this.details = details;
@@ -34,14 +48,14 @@ public class Person {
     }
 
     public Person(String name,
-                  Integer age,
+                  LocalDate date_of_birth,
                   LocalDate contact_date,
                   Integer family_members,
                   String details,
                   Long mobile,
                   String address) {
         this.name = name;
-        this.age = age;
+        this.date_of_birth = date_of_birth;
         this.contact_date = contact_date;
         this.family_members = family_members;
         this.details = details;
@@ -66,7 +80,7 @@ public class Person {
     }
 
     public Integer getAge() {
-        return age;
+        return Period.between(this.date_of_birth, LocalDate.now()).getYears();
     }
 
     public void setAge(Integer age) {
@@ -125,5 +139,13 @@ public class Person {
                 ", mobile=" + mobile +
                 ", address='" + address + '\'' +
                 '}';
+    }
+
+    public LocalDate getDate_of_birth() {
+        return date_of_birth;
+    }
+
+    public void setDate_of_birth(LocalDate date_of_birth) {
+        this.date_of_birth = date_of_birth;
     }
 }
